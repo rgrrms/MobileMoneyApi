@@ -73,7 +73,7 @@ const getOneFinance = async (req, res) => {
 
 const getFinancesByMonth = async (req, res) => {
   try {
-    const data = await Finances.find({ cpfUser: req.userCpf, yearMonth: req.params.yearMonth });
+    const data = await Finances.find({ cpfUser: req.userCpf, yearMonth: req.params.yearMonth }).sort({ day: 1 });
     res.send(data);
   } catch (error) {
     res.status(500).send({ message: "Erro ao buscar os dados " + error });

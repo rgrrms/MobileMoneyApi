@@ -4,4 +4,4 @@
 
 node_modules
 
-/src/models
+/src/models/index.js

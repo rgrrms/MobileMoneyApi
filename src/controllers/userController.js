@@ -8,12 +8,12 @@ const Users = db.users;
 
 const createUser = async (req, res) => {
   try {
-    const { name, pass, cpf } = req.body;
-
+    const { name, pass, cpf, email } = req.body;
     const user = new Users({
       name,
       pass: encryptPass(pass),
-      cpf
+      cpf,
+      email
     })
 
     await user.save();

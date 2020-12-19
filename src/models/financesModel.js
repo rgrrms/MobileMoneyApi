@@ -5,6 +5,10 @@ export default (mongoose) => {
       required: true
     },
     value: {
+      type: String,
+      required: true
+    },
+    valueInNumber: {
       type: Number,
       required: true
     },

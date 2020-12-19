@@ -1,4 +1,5 @@
 import db from "../models";
+import valueFormat from "../utils/value";
 
 const Finances = db.finances;
 
@@ -9,6 +10,7 @@ const createBalance = async (req, res) => {
     const finance = new Finances({
       description: data.description,
       value: data.value,
+      valueInNumber: data.valueInNumber,
       category: data.category,
       year: data.year,
       month: data.month,
@@ -90,12 +92,12 @@ const values = async (req, res) => {
     let valueRevenue = 0;
 
     data.map(item => {
-      item.type === "+" ? value = value + item.value : value = value - item.value;
-      item.type === "-" ? valueExpenses = valueExpenses + item.value : valueRevenue = valueRevenue + item.value;
+      item.type === "+" ? value = value + item.valueInNumber : value = value - item.valueInNumber;
+      item.type === "-" ? valueExpenses = valueExpenses + item.valueInNumber : valueRevenue = valueRevenue + item.valueInNumber;
       count++;
     });
 
-    res.send({ saldo: "R$ " + value, receita: "R$ " + valueRevenue, despesa: "R$ " + valueExpenses, quantidadeLançamentos: count });
+    res.send({ saldo: "R$ " + value.toFixed(2), receita: "R$ " + valueRevenue.toFixed(2), despesa: "R$ " + valueExpenses.toFixed(2), quantidadeLançamentos: count });
   } catch (error) {
     res.status(500).send({ message: "Erro ao buscar os dados " + error});
   }

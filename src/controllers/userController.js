@@ -9,15 +9,20 @@ const Users = db.users;
 const createUser = async (req, res) => {
   try {
     const { name, pass, cpf, email } = req.body;
-    const user = new Users({
-      name,
-      pass: encryptPass(pass),
-      cpf,
-      email
-    })
+    const validateUser = await Users.findOne({ cpf });
+    if (validateUser) {
+      res.status(404).send({ message: "Já existe um usuário com esse cpf! " });
+    } else {
+      const user = new Users({
+        name,
+        pass: encryptPass(pass),
+        cpf,
+        email
+      })
 
-    await user.save();
-    res.send({ message: "Usuário criado com sucesso!" })
+      await user.save();
+      res.send({ message: "Usuário criado com sucesso!" })
+    }
   } catch (e) {
     res.status(500).send({ message: "Algum erro ocorreu ao criar o usuário! " + e });
   }
@@ -65,7 +70,6 @@ const verifyJWT = async (req, res, next) => {
 function encryptPass(pass) {
   const salt = bcrypt.genSaltSync(Number(process.env.SALT));
   const hash = bcrypt.hashSync(pass, salt);
-  console.log(hash)
   return hash;
 };
 
